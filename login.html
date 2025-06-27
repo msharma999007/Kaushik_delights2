@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            --color-primary: #d1487f;
+            --color-primary-dark: #007f67;
+            --color-secondary: #00FFFF;
+            --color-error: #ff0000;
+            --color-success: #4bb544;
+            --border-radius: 4px;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            background: url('./hamburger-1238246_640 (1).jpg');
+            background-size: cover;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .register-banner {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .register-form {
+            width: 100%;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .back-to-main {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            padding: 10px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-to-main a {
+            text-decoration: none;
+            color: #000;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div>
+        <section class="container">
+            <div class="register-banner">
+                <div class="register-form">
+                    <div class="text-center">
+                        <h2>Login Here...</h2>
+                    </div>
+                    <form class="form" action="/loginUser" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="email" placeholder="Enter your email"
+                                value="example@example.com">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password"
+                                placeholder="Enter your password" value="password">
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+    </div>
+    <div class="back-to-main">
+        <a href="index.html">Back to Main Page</a>
+    </div>
+    </section>
+    <script>
+        const express = require('express');
+const app = express();
+const port = 3000; // You can change the port if needed
+
+// Middleware to parse JSON requests
+app.use(express.json());
+
+// Endpoint to handle login requests
+app.post('/loginUser', (req, res) => {
+  const { email, password } = req.body;
+  
+  // Check if email and password match (This is just a placeholder, replace it with your actual authentication logic)
+  if (email === 'example@example.com' && password === 'password') {
+    res.send('Login successful!');
+  } else {
+    res.status(401).send('Invalid email or password');
+  }
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
+
+    </script>
+</body>
+
+</html>

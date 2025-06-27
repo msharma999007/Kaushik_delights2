@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Page</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #order-summary {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #subtotal {
+            font-weight: bold;
+        }
+        
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Button Styles */
+        .quantity-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section id="menu">
+            <h2>Menu</h2>
+            <table id="item-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Price (INR)</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody id="item-list">
+                    <!-- Items will be added dynamically here -->
+                </tbody>
+            </table>
+        </section>
+        <section id="order-summary">
+            <h2>Order Summary</h2>
+            <button id="update-order" class="quantity-btn">Update Order</button>
+            <div id="order-items"></div>
+            <p id="subtotal">Subtotal: ₹0.00</p>
+            <button id="checkout" class="quantity-btn">Checkout</button>
+            <p>"Please be advised that prices and menu items are subject to change. Any adjustments will be communicated in advance, reflecting our commitment to providing you with the best dining experience possible."</p>
+        </section>
+    </main>
+    <div class="back-to-main">
+        <a href="index.html">Back to Main Page</a>
+    </div>
+    <script>
+        // Menu items data
+        const items = {
+            'All': [
+                { name: 'Biryani', price: 200 },
+                { name: 'Masala Biryani', price: 200},
+                { name: 'Vegetable Biryani', price:150},
+                { name: 'Butter Biryani', price: 170 },
+                { name: 'Double Daccer Pizza', price: 450 },
+                { name: 'Margherita Pizza', price: 270 },
+                { name: 'Panner Pizza', price: 250},
+                { name: 'Corn Pizza', price: 90},
+                { name: 'Burger', price: 70 },
+                { name: 'Beef Burger', price: 100 },
+                { name: 'Aalu Tikki Burger', price: 50 },
+                { name: 'Veggie Burger', price: 80 },
+                { name: 'Makhni Pasta', price: 160 },
+                { name: 'Pasta', price: 120 },
+                { name: 'White Souce Pasta', price: 150 },
+                { name: 'Red Souce Pasta', price: 120 },
+                { name: 'Vanila Shake', price: 90 },
+                { name: 'Chocolate Shake', price: 80 },
+                { name: 'Cold Coffee', price: 80 },
+                { name: 'Chocolate Cold Coffee', price: 90 },
+                { name: 'Vanilla Frappe', price: 100 },
+                { name: 'Caramel Latte', price: 150 },
+            
+            ],
+            'Biryani': [
+                { name: 'Masala Biryani', price: 200},
+                { name: 'Vegetable Biryani', price:150},
+                { name: 'Butter Biryani', price: 170 }
+            ],
+            'Pizza': [
+                { name: 'Margherita Pizza', price: 270 },
+                { name: 'Panner Pizza', price: 250},
+                { name: 'Corn Pizza', price: 90}
+            ],
+            'Burger': [
+                { name: 'Beef Burger', price: 100 },
+                { name: 'Aalu Tikki Burger', price: 50 },
+                { name: 'Veggie Burger', price: 80 }
+            ],
+            'Pasta': [
+                { name: 'Makhni Pasta', price: 160 },
+                { name: 'White Souce Pasta', price: 150 },
+                { name: 'Red Souce Pasta', price: 120 }
+            ],
+            'Cold Coffee': [
+                { name: 'Chocolate Cold Coffee', price: 90 },
+                { name: 'Vanilla Frappe', price: 100 },
+                { name: 'Caramel Latte', price: 150 }
+            ]
+        };
+
+        // Function to display menu items
+        function displayMenuItems(category) {
+            const itemList = document.getElementById('item-list');
+            itemList.innerHTML = ''; // Clear previous items
+
+            items[category].forEach(item => {
+                itemList.innerHTML += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.price.toFixed(2)}</td>
+                        <td>
+                            <button class="quantity-btn minus-btn">-</button>
+                            <input type="number" value="0" min="0" class="quantity" data-item="${item.name}">
+                            <button class="quantity-btn plus-btn">+</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Display initial menu items
+        displayMenuItems('All');
+
+        // Update order button event listener
+        document.getElementById('update-order').addEventListener('click', function() {
+            // Get all quantity inputs
+            const quantityInputs = document.querySelectorAll('.quantity');
+            let subtotal = 0;
+
+            // Calculate subtotal
+            quantityInputs.forEach(input => {
+                const itemName = input.dataset.item;
+                const item = items['All'].find(item => item.name === itemName);
+                subtotal += item.price * parseInt(input.value);
+            });
+
+            // Display subtotal
+            document.getElementById('subtotal').textContent = `Subtotal: ₹${subtotal.toFixed(2)}`;
+        });
+
+        // Checkout button event listener
+        // Checkout button event listener
+document.getElementById('checkout').addEventListener('click', function() {
+    // Get the subtotal
+    const subtotal = document.getElementById('subtotal').textContent;
+
+    // Confirm checkout with the user
+    if (confirm(`Confirm checkout?\nSubtotal: ${subtotal}`)) {
+        // Logic for checkout process
+        alert('Redirecting to checkout page...');
+    } else {
+        // User canceled checkout
+        alert('Checkout canceled.');
+    }
+});
+
+    </script>
+</body>
+</html>
